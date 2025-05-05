@@ -1,3 +1,19 @@
+// Конфигурация ESLint для проекта с TypeScript и React
+
+/**
+ * @file Настройка ESLint для обеспечения качества кода
+ * @module
+ * @description Конфигурация включает:
+ * - Базовые правила ESLint
+ * - Поддержку TypeScript
+ * - Правила React Hooks и React Refresh
+ * - Настройки окружения (ES2020, браузерные глобалы)
+ * @see {@link https://eslint.org/ ESLint}
+ * @see {@link https://typescript-eslint.io/ TypeScript ESLint}
+ * @example
+ * export default tseslint.config(...)
+ */
+
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

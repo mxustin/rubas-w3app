@@ -1,4 +1,5 @@
 {
+  "file-description": "Главный конфигурационный файл TypeScrypt",
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

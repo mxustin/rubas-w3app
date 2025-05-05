@@ -1,3 +1,5 @@
+// Файл конфигурации Vite, определяющий параметры сборки для проекта
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
