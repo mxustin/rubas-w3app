@@ -1,54 +1,76 @@
-# React + TypeScript + Vite
+# Rubas
+## Аннотация
+Приводится детальное описание проекта и его ключевых особенностей.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Технологические сведения
 
-Currently, two official plugins are available:
+### Стек
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+В проекте используется стек - Mantine (UI), wagmi + viem (Web3), zustand (стейт), i18next + react-i18next (i18n), 
+loglevel (логирование) - что полностью покрывает все основные потребности современного, несложного Web3-приложения:
 
-## Expanding the ESLint configuration
+**UI**: реализован на основе Mantine (позволяет реализовать единый стиль и поддержку тем).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Web3**: реализуется через связку wagmi + viem (удобные хуки для работы с кошельками, контрактами, сетями, 
+а также для подписания транзакций).
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+**Управление состоянием**: zustand - минималистичный state-менеджер, для хранения пользовательских данных, состояния 
+кошелька, UI-состояния.
+
+**Интернационализация**: i18next + react-i18next.
+
+**Логирование**: loglevel - легковесное и настраиваемое решение для логирования, достаточно для любого масштаба приложения.
+
+### Управление изменениями репозитория
+
+Применяется упрощенный flow (с feature-ветками). Такой подход позволяет, с одной стороны, избежать избыточных
+сложностей, а с другой - оберегать имеющийся код от разрушения при работе над новой функциональностью. В рамках этого
+flow предполагается выполнение следующих действий:
+
+1. Переключиться на основную ветку и обновить её:
+``` 
+git checkout master
+git pull master
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Создать новую ветку для задачи c использованием следующих префиксов `feature/`, `bugfix/`, `docs/`, `chore/` (об
+   именовании веток - см. следующий раздел):
 ```
+git checkout -b feature/some-branch-name
+```
+
+3. Внести изменения.
+
+4. Добавить файлы в индекс и выполнить коммит:
+```
+git add ***
+git commit -m "Описание изменений"
+```
+
+5. Переключиться на основную ветку:
+   
+```
+git checkout master
+```
+
+6. Объединить ветки:
+
+```
+git merge feature/some-branch-name
+```
+
+7. _Опционально_: отправить изменения на удалённый репозиторий:
+```
+git push master
+```
+
+8. _Опционально_: удалить ненужную ветку.
+
+### Именование веток репозитория
+
+Для веток следует выбирать имена, начинающиеся со следующих префиксов:
+
+* feature/ - добавление нового функционала;
+* bugfix/ - исправление ошибки;
+* docs/ - если это чисто документация (очень популярный префикс для таких задач);
+* chore/ - если это техническое изменение, не влияющее на функционал.
