@@ -1,0 +1,9 @@
+/* Стили для кнопки подключения кошелька */
+
+.connect-wallet-button {
+  .button-content {
+    display: flex;
+    align-items: center;
+    gap: var(--mantine-spacing-sm);
+  }
+}

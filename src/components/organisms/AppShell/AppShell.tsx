@@ -6,9 +6,11 @@
  * @module
  */
 
-import { AppShell as MantineAppShell, Burger } from '@mantine/core';
+import { AppShell as MantineAppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import './AppShell.scss';
+import './AppShell.module.scss';
+
+import { ConnectWalletButton } from "../../atoms/Buttons/ConnectWalletButton/ConnectWalletButton.tsx";
 
 export const AppShell: React.FC = () => {
     const [opened, { toggle }] = useDisclosure();
@@ -24,13 +26,7 @@ export const AppShell: React.FC = () => {
             padding="md"
         >
             <MantineAppShell.Header>
-                <Burger
-                    opened={opened}
-                    onClick={toggle}
-                    hiddenFrom="sm"
-                    size="sm"
-                />
-                <div>Logo</div>
+                <ConnectWalletButton />
             </MantineAppShell.Header>
 
             <MantineAppShell.Navbar p="md">Navbar</MantineAppShell.Navbar>
