@@ -8,14 +8,13 @@
  */
 
 import './App.scss'
+import { AppShell } from './components/organisms/AppShell/AppShell';
 
 function App() {
 
   return (
     <>
-      <p>
-        Hello, World!
-      </p>
+        <AppShell />
     </>
   )
 }

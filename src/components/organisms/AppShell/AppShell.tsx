@@ -1,4 +1,4 @@
-// Визуальный компонент-организм AppShell (заголовок главного окна приложения)
+// Визуальный компонент-организм AppShell<br> (заголовок главного окна приложения)
 
 /**
  * Организм: AppShell - адаптивный интерфейс приложения, который включает в себя: заголовок (header), навигационную
@@ -6,14 +6,15 @@
  * @module
  */
 
-import { AppShell, Burger } from '@mantine/core';
+import { AppShell as MantineAppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import './AppShell.scss';
 
-function BaseLayout() {
+export const AppShell: React.FC = () => {
     const [opened, { toggle }] = useDisclosure();
 
     return (
-        <AppShell
+        <MantineAppShell
             header={{ height: 60 }}
             navbar={{
                 width: 300,
@@ -22,7 +23,7 @@ function BaseLayout() {
             }}
             padding="md"
         >
-            <AppShell.Header>
+            <MantineAppShell.Header>
                 <Burger
                     opened={opened}
                     onClick={toggle}
@@ -30,13 +31,11 @@ function BaseLayout() {
                     size="sm"
                 />
                 <div>Logo</div>
-            </AppShell.Header>
+            </MantineAppShell.Header>
 
-            <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
+            <MantineAppShell.Navbar p="md">Navbar</MantineAppShell.Navbar>
 
-            <AppShell.Main>Main</AppShell.Main>
-        </AppShell>
+            <MantineAppShell.Main>Main</MantineAppShell.Main>
+        </MantineAppShell>
     );
-}
-
-export default BaseLayout;
+};
