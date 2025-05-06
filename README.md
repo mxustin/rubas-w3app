@@ -11,10 +11,10 @@
 
 ### Стек используемых библиотек и фреймворков
 
-В проекте используется стек - Mantine (UI), wagmi + viem (Web3), zustand (стейт), i18next + react-i18next (i18n), 
+В проекте используется стек - Ant Design (UI), wagmi + viem (Web3), zustand (стейт), i18next + react-i18next (i18n), 
 loglevel (логирование) - что полностью покрывает все основные потребности современного, несложного Web3-приложения:
 
-**UI**: реализован на основе Mantine (позволяет реализовать единый стиль и поддержку тем).
+**UI**: реализован на основе Ant Design (позволяет реализовать единый стиль и поддержку тем).
 
 **Web3**: реализуется через связку wagmi + viem (удобные хуки для работы с кошельками, контрактами, сетями, 
 а также для подписания транзакций).
@@ -28,14 +28,14 @@ loglevel (логирование) - что полностью покрывает
 
 Версии используемых библиотек представлены в следующей таблице:
 
-| Категория         | Технологии                  | Пакеты (версии)                       |
-|-------------------|-----------------------------|---------------------------------------|
-| UI Framework      | Mantine                     | @mantine/core (8.0.0), @mantine/hooks |
-| Web3              | Wagmi + Viem                | wagmi (2.15.2), viem (2.28.4)         |
-| State Management  | Zustand + React Context     | zustand (5.0.4)                       |
-| i18n              | i18next + React Integration | i18next (25.0.2), react-i18next       |
-| Utilities         | React Hooks Collection      | react-use (17.6.0)                    |
-| Utilities         | loglevel                    | loglevel (1.9.2)                      |
+| Категория         | Технологии                  | Пакеты (версии)                 |
+|-------------------|-----------------------------|---------------------------------|
+| UI Framework      | Ant Design                  | antd (5.24.9)   |
+| Web3              | Wagmi + Viem                | wagmi (2.15.2), viem (2.28.4)   |
+| State Management  | Zustand + React Context     | zustand (5.0.4)                 |
+| i18n              | i18next + React Integration | i18next (25.0.2), react-i18next |
+| Utilities         | React Hooks Collection      | react-use (17.6.0)              |
+| Utilities         | loglevel                    | loglevel (1.9.2)                |
 
 ### Стек инструментов разработки
 
@@ -45,6 +45,7 @@ loglevel (логирование) - что полностью покрывает
 - **Type Checking**: TypeScript (5.8.3)
 - **React Runtime**: @vitejs/plugin-react (4.4.1)
 - **SCSS**: sass (1.87.0)
+- **NodeJS**: v22.13.1
 
 ### Требования к процессу разработки
 

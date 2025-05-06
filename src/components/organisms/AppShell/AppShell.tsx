@@ -6,36 +6,37 @@
  * @module
  */
 
-import { AppShell as MantineAppShell, Burger } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import './AppShell.scss';
+import { Layout } from 'antd';
+import { ConnectWalletButton } from '../../atoms/Buttons/ConnectWalletButton/ConnectWalletButton.tsx';
+
+const { Header, Sider, Content } = Layout;
 
 export const AppShell: React.FC = () => {
-    const [opened, { toggle }] = useDisclosure();
-
     return (
-        <MantineAppShell
-            header={{ height: 60 }}
-            navbar={{
-                width: 300,
-                breakpoint: 'sm',
-                collapsed: { mobile: !opened },
-            }}
-            padding="md"
-        >
-            <MantineAppShell.Header>
-                <Burger
-                    opened={opened}
-                    onClick={toggle}
-                    hiddenFrom="sm"
-                    size="sm"
-                />
-                <div>Logo</div>
-            </MantineAppShell.Header>
+        <Layout style={{ minHeight: '100vh' }}>
+            <Sider width={200} style={{ background: '#fff' }}>
+                {/* Навигация */}
+            </Sider>
 
-            <MantineAppShell.Navbar p="md">Navbar</MantineAppShell.Navbar>
+            <Layout>
+                <Header
+                    style={{
+                        background: '#fff',
+                        padding: '0 24px',
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        height: 64,
+                        borderBottom: '1px solid #f0f0f0',
+                    }}
+                >
+                    <ConnectWalletButton />
+                </Header>
 
-            <MantineAppShell.Main>Main</MantineAppShell.Main>
-        </MantineAppShell>
+                <Content style={{ margin: '24px', background: '#fff', padding: 24 }}>
+                    Main Content
+                </Content>
+            </Layout>
+        </Layout>
     );
 };
