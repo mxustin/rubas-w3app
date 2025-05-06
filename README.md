@@ -30,7 +30,7 @@ loglevel (логирование) - что полностью покрывает
 
 | Категория         | Технологии                  | Пакеты (версии)                 |
 |-------------------|-----------------------------|---------------------------------|
-| UI Framework      | Ant Design                  | antd (5.24.9)   |
+| UI Framework      | Ant Design                  | antd (5.24.9)                   |
 | Web3              | Wagmi + Viem                | wagmi (2.15.2), viem (2.28.4)   |
 | State Management  | Zustand + React Context     | zustand (5.0.4)                 |
 | i18n              | i18next + React Integration | i18next (25.0.2), react-i18next |
