@@ -11,10 +11,10 @@
 
 ### Стек используемых библиотек и фреймворков
 
-В проекте используется стек - Ant Design (UI), wagmi + viem (Web3), zustand (стейт), i18next + react-i18next (i18n), 
-loglevel (логирование) - что полностью покрывает все основные потребности современного, несложного Web3-приложения:
+В проекте используется стек - Ant Design (UI) + Icons, wagmi + viem (Web3), zustand (стейт), i18next + react-i18next
+(i18n), loglevel (логирование):
 
-**UI**: реализован на основе Ant Design (позволяет реализовать единый стиль и поддержку тем).
+**UI**: реализован на основе Ant Design + Icons (позволяет реализовать единый стиль и поддержку тем).
 
 **Web3**: реализуется через связку wagmi + viem (удобные хуки для работы с кошельками, контрактами, сетями, 
 а также для подписания транзакций).
@@ -26,26 +26,34 @@ loglevel (логирование) - что полностью покрывает
 
 **Логирование**: loglevel - легковесное и настраиваемое решение для логирования, достаточно для любого масштаба приложения.
 
-Версии используемых библиотек представлены в следующей таблице:
+Конкретные версии представлены в следующей таблице:
 
-| Категория         | Технологии                  | Пакеты (версии)                 |
-|-------------------|-----------------------------|---------------------------------|
-| UI Framework      | Ant Design                  | antd (5.24.9)                   |
-| Web3              | Wagmi + Viem                | wagmi (2.15.2), viem (2.28.4)   |
-| State Management  | Zustand + React Context     | zustand (5.0.4)                 |
-| i18n              | i18next + React Integration | i18next (25.0.2), react-i18next |
-| Utilities         | React Hooks Collection      | react-use (17.6.0)              |
-| Utilities         | loglevel                    | loglevel (1.9.2)                |
+| Категория            | Технологии                  | Пакеты (версии)                                                                          |
+|----------------------|-----------------------------|------------------------------------------------------------------------------------------|
+| **UI Framework**     | Ant Design + Icons          | `antd` (5.24.9), `@ant-design/icons` (6.0.0)                                             |
+| **Web3**             | Wagmi + Viem                | `wagmi` (2.15.2), `viem` (2.28.4)                                                        |
+| **State Management** | Zustand + React Context     | `zustand` (5.0.4), `use-sync-external-store` (1.5.0)                                     |
+| **i18n**             | i18next + React Integration | `i18next` (25.0.2), `react-i18next` (15.5.1), `i18next-browser-languagedetector` (8.1.0) |
+| **Utilities**        | React Hooks Collection      | `react-use` (17.6.0)                                                                     |
+| **Логирование**      | loglevel                    | `loglevel` (1.9.2)                                                                       |
 
 ### Стек инструментов разработки
 
-Инструменты разработки:
-- **Bundler**: Vite (6.3.5)
-- **Linting**: ESLint (9.25.0) с плагинами React
-- **Type Checking**: TypeScript (5.8.3)
-- **React Runtime**: @vitejs/plugin-react (4.4.1)
-- **SCSS**: sass (1.87.0)
-- **NodeJS**: v22.13.1
+| Категория               | Инструменты / Конфигурации                                                  |
+|-------------------------|-----------------------------------------------------------------------------|
+| **Bundler**             | `Vite` (6.3.5)                                                              |
+| **Linting**             | - `ESLint` (9.26.0) с плагинами:                                            |
+|                         | - `@typescript-eslint/eslint-plugin` (8.32.0)                               |
+|                         | - `eslint-plugin-import` (2.31.0)                                           |
+|                         | - `eslint-plugin-prettier` (5.4.0)                                          |
+|                         | - `eslint-plugin-react-hooks` (5.2.0)                                       |
+|                         | - `eslint-plugin-react-refresh` (0.4.19)                                    |
+|                         | - `eslint-plugin-simple-import-sort` (12.1.1)                               |
+| **Форматирование кода** | `Prettier` (3.5.3) с конфигурацией `eslint-config-prettier` (10.1.3)        |
+| **Type Checking**       | `TypeScript` (5.8.3) + `@types/react` (19.1.2), `@types/react-dom` (19.1.2) |
+| **React Runtime**       | `@vitejs/plugin-react` (4.4.1)                                              |
+| **SCSS**                | `sass` (1.87.0)                                                             |
+| **Node.js**             | v22.13.1                                                                    |
 
 ### Требования к процессу разработки
 
