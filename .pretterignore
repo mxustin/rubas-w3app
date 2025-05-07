@@ -1,0 +1,4 @@
+npx eslint . --fixdist
+node_modules
+build
+coverage
