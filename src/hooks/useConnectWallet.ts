@@ -7,6 +7,7 @@
  @module */
 
 import { useCallback, useState } from 'react';
+
 import log from '../log';
 import { useWalletStore } from '../stores/useWalletStore';
 
@@ -14,8 +15,8 @@ export const useConnectWallet = () => {
     const [loading, setLoading] = useState(false);
     const setWalletState = useWalletStore((state) => state.setState);
 
-    const connect = useCallback(async () => {
-        log.debug('useConnectWallet: начало подключения к MetaMask');
+    const connect = useCallback(async (componentName: string): Promise<void> => {
+        log.debug(`Кнопка ${componentName} вызвала useConnectWallet: начало подключения к MetaMask`);
         setLoading(true);
 
         try {
