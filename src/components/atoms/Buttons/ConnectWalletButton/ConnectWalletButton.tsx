@@ -1,4 +1,4 @@
-// Атомарный компонент: кнопка подключения кошелька (MetaMask)
+// Атомарный компонент: кнопка подключения кошелька (MetaMask) [★★★★☆]
 
 /**
  * ConnectWalletButton — атомарная кнопка на базе Ant Design для управления подключением кошелька MetaMask (или
@@ -21,31 +21,31 @@
  * С прицелом на будущее развитие создан useWallet().
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { Button } from 'antd';
-import type { ButtonProps } from 'antd';
 import { WalletOutlined } from '@ant-design/icons';
+import { Button,type ButtonProps } from 'antd';
+import * as React from "react";
 import { useTranslation } from 'react-i18next';
-import log from '../../../../log'; // предполагается, что логгер централизован
-import classes from './ConnectWalletButton.module.scss';
-import { useConnectWallet } from '../../../../hooks/useConnectWallet';
 
+import { useConnectWallet } from '@/hooks/useConnectWallet';
+import log from '@/log';
+
+import classes from './ConnectWalletButton.module.scss';
 
 export const ConnectWalletButton: React.FC<ButtonProps> = (props) => {
     const { t } = useTranslation();
     const componentName = 'ConnectWalletButton';
     const { connect, loading } = useConnectWallet();
 
-// Логируем изменение состояния
-    useEffect(() => {
+    // Логируем изменение состояния
+    React.useEffect(() => {
         const stateName = loading ? 'loading' : 'idle';
         log.debug(`Кнопка ${componentName}: изменение состояния. Состояние изменено на "${stateName}".`);
-    }, [loading, componentName]);
+    }, [loading]);
 
-// Обработчик клика
+    // Обработчик клика
     const handleClick = async (): Promise<void> => {
         log.debug(`Кнопка ${componentName}: пользователь нажал на кнопку.`);
-        await connect();
+        await connect(componentName);
     };
 
     return (
