@@ -39,12 +39,12 @@ export const ConnectWalletButton: React.FC<ButtonProps> = (props) => {
     // Логируем изменение состояния
     React.useEffect(() => {
         const stateName = loading ? 'loading' : 'idle';
-        log.debug(`Кнопка ${componentName}: изменение состояния. Состояние изменено на "${stateName}".`);
+        log.debug(`Кнопка ${componentName}: выполнено изменение состояния. Состояние изменено на "${stateName}".`);
     }, [loading]);
 
     // Обработчик клика
     const handleClick = async (): Promise<void> => {
-        log.debug(`Кнопка ${componentName}: пользователь нажал на кнопку.`);
+        log.debug(`Кнопка ${componentName}: произошло нажатие пользователем.`);
         await connect(componentName);
     };
 
