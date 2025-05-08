@@ -4,5 +4,4 @@
 node_modules
 combine.py
 combined_proj.txt
-
-*storybook.log
+package-lock.json
