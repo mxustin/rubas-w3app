@@ -2,5 +2,8 @@
   "file-description": "Русскоязычная локализация",
   "connectWalletButton": {
     "label": "Подключить кошелек"
+  },
+  "cancelButton": {
+    "label": "Отмена"
   }
 }
