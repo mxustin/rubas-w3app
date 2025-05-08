@@ -1,8 +1,13 @@
 {
-  "file-description": "Главный конфигурационный файл TypeScrypt",
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "file-description": "Главный конфигурационный файл TypeScript",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["@storybook/jest", "@storybook/testing-library", "@storybook/addons", "vite/client"]
+  },
+  "include": [".storybook/**/*.tsx"],
+  "exclude": ["node_modules"]
 }
