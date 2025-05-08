@@ -1,4 +1,8 @@
 .idea
+.venv
+.storybook
 node_modules
 combine.py
 combined_proj.txt
+
+*storybook.log
