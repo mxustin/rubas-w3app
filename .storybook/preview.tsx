@@ -1,6 +1,10 @@
+// Настройки отображения для Storybook (в т.ч., настройки тулбара)
+
 import 'antd/dist/reset.css';
 import '@/index.css';
-import React from 'react';
+
+import * as React from 'react';
+
 import i18n from '@/i18n';
 
 export const globalTypes = {
