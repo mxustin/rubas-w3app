@@ -1,6 +1,5 @@
 .idea
 .venv
-.storybook
 ./storybook-static
 node_modules
 combine.py
