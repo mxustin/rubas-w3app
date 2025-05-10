@@ -6,5 +6,43 @@
   "cancelButton": {
     "label": "Отмена"
   },
-  "months": ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"]
+  "months": ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"],
+  "mmConnectionPhases": {
+    "checkIfMetaMaskInstalled": {
+      "header": "Проверка наличия MetaMask",
+      "states": {
+        "waiting": "",
+        "inprogress": "Проверка наличия установленного расширения MetaMask",
+        "success": "{formatedNow} — Расширение MetaMask обнаружено. Продолжаем...",
+        "fail": "{formatedNow} — Расширение MetaMask не обнаружено. Продолжение невозможно!"
+      }
+    },
+    "checkIfMetaMaskUnlocked": {
+      "header": "Проверка состояния MetaMask",
+      "states": {
+        "waiting": "Не начата",
+        "inprogress": "Контроль текущего статуса доступности расширения MetaMask",
+        "success": "{formatedNow} — Расширение MetaMask разблокировано. Продолжаем...",
+        "fail": "{formatedNow} — Расширение MetaMask заблокировано. Продолжение невозможно!"
+      }
+    },
+    "checkIfMetaMaskConnectedToBSC": {
+      "header": "Проверка подключения к BSC",
+      "states": {
+        "waiting": "Не начата",
+        "inprogress": "Проверка подключения к целевой сети BNB Smart Chain (BSC)",
+        "success": "{formatedNow} — Расширение MetaMask подключено в BSC. Продолжаем...",
+        "fail": "{formatedNow} — Расширение MetaMask не подключено в BSC. Продолжение невозможно!"
+      }
+    },
+    "checkOutMetaMaskAccount": {
+      "header": "Получение данных по аккаунту",
+      "states": {
+        "waiting": "Не начато",
+        "inprogress": "Получение актуальных данных по текущему аккаунту",
+        "success": "{formatedNow} — Подключение завершено! Приступаем к работе!",
+        "fail": "{formatedNow} — Не удалось получить данные по аккаунту. Продолжение невозможно!"
+      }
+    }
+  }
 }

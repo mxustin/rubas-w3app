@@ -6,5 +6,43 @@
   "cancelButton": {
     "label": "Cancel"
   },
-  "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  "mmConnectionPhases": {
+    "checkIfMetaMaskInstalled": {
+      "header": "Checking MetaMask installation",
+      "states": {
+        "waiting": "",
+        "inprogress": "Checking if MetaMask extension is installed",
+        "success": "{formatedNow} — MetaMask extension detected. Proceeding...",
+        "fail": "{formatedNow} — MetaMask extension not detected. Cannot continue!"
+      }
+    },
+    "checkIfMetaMaskUnlocked": {
+      "header": "Checking MetaMask status",
+      "states": {
+        "waiting": "Not started",
+        "inprogress": "Verifying current availability status of MetaMask extension",
+        "success": "{formatedNow} — MetaMask is unlocked. Proceeding...",
+        "fail": "{formatedNow} — MetaMask is locked. Cannot continue!"
+      }
+    },
+    "checkIfMetaMaskConnectedToBSC": {
+      "header": "Checking connection to BSC",
+      "states": {
+        "waiting": "Not started",
+        "inprogress": "Checking connection to the target BNB Smart Chain (BSC) network",
+        "success": "{formatedNow} — MetaMask is connected to BSC. Proceeding...",
+        "fail": "{formatedNow} — MetaMask is not connected to BSC. Cannot continue!"
+      }
+    },
+    "checkOutMetaMaskAccount": {
+      "header": "Fetching wallet data",
+      "states": {
+        "waiting": "Not started",
+        "inprogress": "Retrieving current account data",
+        "success": "{formatedNow} — Connection established! Getting started!",
+        "fail": "{formatedNow} — Failed to retrieve wallet data. Cannot continue!"
+      }
+    }
+  }
 }
