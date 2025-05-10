@@ -1,7 +1,7 @@
 // Функция представления даты и времени в кратком формате
 
-import log from '@/log';
 import i18n from '@/i18n';
+import log from '@/log';
 
 /**
  * Форматирует дату и время в строку формата:
@@ -32,17 +32,15 @@ export const formatDateTime = (date?: Date): string => {
     const seconds = targetDate.getSeconds().toString().padStart(2, '0');
     const monthIndex = targetDate.getMonth(); // 0–11
 
-    const monthMap: Record<string, string[]> = {
-        ru: ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'],
-        en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    };
+    // Получаем массив месяцев из локализации
+    const months = i18n.t('months', { returnObjects: true }) as string[];
 
-    const month = monthMap[currentLocale]?.[monthIndex] ?? monthMap['en'][monthIndex];
+    const month = months?.[monthIndex] ?? '???';
 
     // Формируем строку в зависимости от локали
     const formattedString =
         currentLocale === 'ru'
-            ? `${day} ${month} ${hours}:${minutes}:${seconds}`: `${month} ${day} ${hours}:${minutes}:${seconds}`;
+            ? `${day} ${month} ${hours}:${minutes}:${seconds}`: `${month} ${day}, ${hours}:${minutes}:${seconds}`;
 
     log.debug(`Функция форматирования даты и времени. Отформатированная строка: "${formattedString}" 
       (текущая локаль: ${currentLocale}).`);
