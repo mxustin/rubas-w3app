@@ -1,0 +1,21 @@
+/* Стили компонента MetaMaskConnectionTimeline */
+
+.container {
+  padding: 16px;
+}
+
+.timelineItem {
+  margin-bottom: 8px;
+}
+
+.transparentDot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+}
+
+/* Переопределяем стандартный фон точки только для кастомных dot */
+:global(.ant-timeline-item-head) {
+  background: transparent !important;
+}
