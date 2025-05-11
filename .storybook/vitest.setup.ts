@@ -1,4 +1,4 @@
-// Файл настроек ViTest для Storybook
+// Файл настроек ViTest для Storybook [★★★☆☆]
 
 import { setProjectAnnotations } from '@storybook/react';
 import { beforeAll } from 'vitest';
