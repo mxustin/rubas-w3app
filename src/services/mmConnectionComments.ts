@@ -1,7 +1,7 @@
 // Функция получения заголовков и комментариев для стадий подключения MetaMask [★☆☆☆☆]
 
 /**
- * mmConnectionComments — функция для получения заголовков и комментариев
+ * mmConnectionComments - функция для получения заголовков и комментариев
  * к стадиям подключения MetaMask в зависимости от текущей фазы и состояния.
  * Использует локализацию и форматирование времени.
  * @module mmConnectionComments
@@ -43,17 +43,21 @@ export interface MMConnectionCommentResult {
 
 /**
  * Возвращает заголовок и комментарий для указанной фазы и состояния
- * @param {MMConnectionPhase} phase — текущая фаза подключения
- * @param {MMConnectionState} state — состояние в рамках фазы
- * @returns {MMConnectionCommentResult} объект с полями header и comment */
-
+ * @param {MMConnectionPhase} phase - текущая фаза подключения
+ * @param {MMConnectionState} state - состояние в рамках фазы
+ * @param {string | null} [formattedTime] - строка с датой/временем для подстановки в комментарий (опционально)
+ * @returns {MMConnectionCommentResult} объект с полями header и comment
+ */
 export const mmConnectionComments = (
-        phase: MMConnectionPhase,
-        state: MMConnectionState,
-    ): MMConnectionCommentResult => { const formatedNow = formatDateTime();
+    phase: MMConnectionPhase,
+    state: MMConnectionState,
+    formattedTime?: string | null,
+): MMConnectionCommentResult => {
+    // Если передано время, используем его, иначе - текущее
+    const formatedNow = formattedTime ?? formatDateTime();
 
     // Логируем входящие параметры
-    log.debug(`mmConnectionComments: вызов с параметрами phase="${phase}", state="${state}"`);
+    log.debug(`mmConnectionComments: вызов с параметрами phase="${phase}", state="${state}", formattedTime="${formattedTime}"`);
 
     const phaseTranslations = i18n.t(`mmConnectionPhases.${phase}`, {
         returnObjects: true,
@@ -62,7 +66,7 @@ export const mmConnectionComments = (
         states: Record<string, string>;
     };
 
-    const header = phaseTranslations?.header ?? '—';
+    const header = phaseTranslations?.header ?? '-';
     let commentTemplate = phaseTranslations?.states?.[state] ?? '';
 
     // Заменяем {formatedNow}, если он есть
