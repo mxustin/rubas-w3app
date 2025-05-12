@@ -1,0 +1,20 @@
+/* Модульные стили для боковой панели */
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 16px;
+}
+
+.footer {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+  margin-top: 16px;
+  text-align: center;
+}
