@@ -44,5 +44,9 @@
         "fail": "{formatedNow} — Failed to retrieve wallet data. Cannot continue!"
       }
     }
+  },
+  "metaMaskDrawer": {
+    "title": "Connect to MetaMask",
+    "footer": "MetaMask connection process progress"
   }
 }
