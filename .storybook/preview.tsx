@@ -1,12 +1,14 @@
-// Настройки отображения для Storybook (в т.ч., настройки тулбара)
+// Настройки отображения для Storybook (настройки тулбара: добавление кнопки переключения локализаций) [★★★☆☆]
 
 import 'antd/dist/reset.css';
 import '@/index.css';
 
+import type { Decorator, StoryContext, StoryFn } from '@storybook/react';
 import * as React from 'react';
 
 import i18n from '@/i18n';
 
+// noinspection JSUnusedGlobalSymbols
 export const globalTypes = {
     locale: {
         name: 'Locale',
@@ -23,15 +25,19 @@ export const globalTypes = {
     },
 };
 
+/* eslint-disable react-refresh/only-export-components */
 const LocaleEffect = ({ locale }: { locale: string }) => {
     React.useEffect(() => {
-        i18n.changeLanguage(locale);
+        i18n.changeLanguage(locale).catch((err) => {
+            console.error('Ошибка при попытке смены языка:', err);
+        });
     }, [locale]);
     return null;
 };
 
-export const decorators = [
-    (Story, context) => (
+// noinspection JSUnusedGlobalSymbols
+export const decorators: Decorator[] = [
+    (Story: StoryFn<React.ReactNode>, context: StoryContext) => (
         <>
             <LocaleEffect locale={context.globals.locale} />
             <Story />
@@ -39,10 +45,11 @@ export const decorators = [
     ),
 ];
 
+// noinspection JSUnusedGlobalSymbols
 export default {
     parameters: {
         docs: {
-            page: undefined, // Важно! Используем autodocs
+            page: undefined,
         },
         actions: { argTypesRegex: '^on[A-Z].*' },
         controls: {
