@@ -47,6 +47,7 @@
   },
   "metaMaskDrawer": {
     "title": "Connect to MetaMask",
-    "footer": "MetaMask connection process progress"
+    "footer": "MetaMask connection progress",
+    "connected": "Connected address:"
   }
 }
