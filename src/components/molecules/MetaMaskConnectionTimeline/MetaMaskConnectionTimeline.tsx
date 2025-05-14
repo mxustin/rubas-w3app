@@ -1,11 +1,9 @@
-// Таймлайн для отображения отдельных фаз подключения к MetaMask-у
+// Таймлайн для отображения отдельных фаз подключения к MetaMask [★★★★☆]
 
-// Импорт необходимых библиотек и компонентов
 import { ClockCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Timeline, Typography } from 'antd';
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import * as React from 'react';
 
-// Импорт вспомогательных модулей
 import log from '@/log';
 import { formatDateTime } from '@/services/formatDateTime';
 import {
@@ -13,309 +11,280 @@ import {
     type MMConnectionPhase,
     MMConnectionPhases,
     type MMConnectionState,
-    MMConnectionStates
+    MMConnectionStates,
 } from '@/services/mmConnectionComments';
 
-// Импорт стилей
 import classes from './MetaMaskConnectionTimeline.module.scss';
 
-// Интерфейс для пропсов компонента
 export interface MetaMaskConnectionTimelineProps {
-    /**
-     * Обработчик успешного перехода на следующую стадию
-     */
     onGoOn?: () => void;
-
-    /**
-     * Обработчик прерывания процесса
-     */
     onBreak?: () => void;
-
-    /**
-     * Обработчик сброса состояния
-     */
     onReset?: () => void;
-
-    /**
-     * Внешнее управление состояниями фаз
-     */
     phases?: Record<MMConnectionPhase, MMConnectionState>;
-
-    /**
-     * Минимальное время отображения стадии (в миллисекундах)
-     */
     minStageTime?: number;
+
+    onCheckMetaMaskInstalled?: () => Promise<boolean>;
+    onCheckMetaMaskUnlocked?: () => Promise<boolean>;
+    onCheckMetaMaskNetwork?: () => Promise<boolean>;
+    onCheckMetaMaskAccount?: () => Promise<boolean>;
 }
 
-// Интерфейс для методов, доступных через ref
 export interface MetaMaskConnectionTimelineRef {
-    /**
-     * Переход к следующей стадии
-     */
     goOn: () => void;
-
-    /**
-     * Прерывание текущей стадии
-     */
     break: () => void;
-
-    /**
-     * Полный сброс состояния
-     */
     reset: () => void;
-
-    /**
-     * Получение текущей активной фазы
-     */
     getCurrentPhase: () => MMConnectionPhase;
-
-    /**
-     * Проверка состояния ожидания
-     */
     isWaiting: () => boolean;
 }
 
-/**
- * Основной компонент Timeline для отображения процесса подключения к MetaMask
- */
-export const MetaMaskConnectionTimeline =
-    React.forwardRef<MetaMaskConnectionTimelineRef, MetaMaskConnectionTimelineProps>(
-        (props, ref) => {
-            // Деструктуризация пропсов
-            const {
-                onGoOn,
-                onBreak,
-                onReset,
-                phases: externalPhases,
-                minStageTime = 250
-            } = props;
+export const MetaMaskConnectionTimeline = React.forwardRef<MetaMaskConnectionTimelineRef, MetaMaskConnectionTimelineProps>
+    ((props, ref) => {
+        const {
+            onGoOn,
+            onBreak,
+            onReset,
+            phases: externalPhases,
+            minStageTime = 500,
+            onCheckMetaMaskInstalled,
+            onCheckMetaMaskUnlocked,
+            onCheckMetaMaskNetwork,
+            onCheckMetaMaskAccount,
+        } = props;
 
-            // Имя компонента для логирования
-            const componentName = 'MetaMaskConnectionTimeline';
+    const componentName = 'MetaMaskConnectionTimeline';
 
-            // Порядок следования фаз
-            const phaseOrder = [
-                MMConnectionPhases.CHECK_IF_INSTALLED,
-                MMConnectionPhases.CHECK_IF_UNLOCKED,
-                MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC,
-                MMConnectionPhases.CHECK_OUT_ACCOUNT,
-            ];
+    const phaseOrder: MMConnectionPhase[] = [
+        MMConnectionPhases.CHECK_IF_INSTALLED,
+        MMConnectionPhases.CHECK_IF_UNLOCKED,
+        MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC,
+        MMConnectionPhases.CHECK_OUT_ACCOUNT,
+    ];
 
-            // Начальное состояние всех фаз
-            const initialPhases = {
-                [MMConnectionPhases.CHECK_IF_INSTALLED]: MMConnectionStates.IN_PROGRESS,
-                [MMConnectionPhases.CHECK_IF_UNLOCKED]: MMConnectionStates.WAITING,
-                [MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC]: MMConnectionStates.WAITING,
-                [MMConnectionPhases.CHECK_OUT_ACCOUNT]: MMConnectionStates.WAITING,
-            };
+    const initialPhases: Record<MMConnectionPhase, MMConnectionState> = {
+        [MMConnectionPhases.CHECK_IF_INSTALLED]: MMConnectionStates.IN_PROGRESS,
+        [MMConnectionPhases.CHECK_IF_UNLOCKED]: MMConnectionStates.WAITING,
+        [MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC]: MMConnectionStates.WAITING,
+        [MMConnectionPhases.CHECK_OUT_ACCOUNT]: MMConnectionStates.WAITING,
+    };
 
-            // Хук состояния для хранения временных меток завершения фаз
-            const [phaseTimestamps, setPhaseTimestamps] = useState<
-                Record<MMConnectionPhase, string | null>
-            >({
-                [MMConnectionPhases.CHECK_IF_INSTALLED]: null,
-                [MMConnectionPhases.CHECK_IF_UNLOCKED]: null,
-                [MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC]: null,
-                [MMConnectionPhases.CHECK_OUT_ACCOUNT]: null,
-            });
+    const [phasesState, setPhasesState] = React.useState<Record<MMConnectionPhase, MMConnectionState>>(
+        externalPhases || initialPhases,
+    );
 
-            // Хук состояния для управления процессом выполнения
-            const [isProcessing, setIsProcessing] = useState(false);
+    const [phaseTimestamps, setPhaseTimestamps] = React.useState<Record<MMConnectionPhase, string | null>>({
+        [MMConnectionPhases.CHECK_IF_INSTALLED]: null,
+        [MMConnectionPhases.CHECK_IF_UNLOCKED]: null,
+        [MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC]: null,
+        [MMConnectionPhases.CHECK_OUT_ACCOUNT]: null,
+    });
 
-            // Основное состояние компонента
-            const [phasesState, setPhasesState] = useState<Record<MMConnectionPhase, MMConnectionState>>(
-                externalPhases || initialPhases
-            );
+    const [isProcessing, setIsProcessing] = React.useState(false);
+    const [isFinished, setIsFinished] = React.useState(false);
 
-            // Определение текущей активной фазы
-            const currentPhase = (() => {
-                // Поиск фазы в состоянии "в процессе"
-                const inProgressPhase = phaseOrder.find(
-                    phase => phasesState[phase] === MMConnectionStates.IN_PROGRESS
-                );
+    const currentPhase = React.useMemo(() => {
+        return (
+            phaseOrder.find((phase) => phasesState[phase] === MMConnectionStates.IN_PROGRESS) ||
+            phaseOrder.find((phase) => phasesState[phase] !== MMConnectionStates.SUCCESS) ||
+            MMConnectionPhases.CHECK_IF_INSTALLED
+        );
+    }, [phasesState]);
 
-                // Возвращаем найденную фазу или первую не завершенную
-                return inProgressPhase
-                    || phaseOrder.find(phase => phasesState[phase] !== MMConnectionStates.SUCCESS)
-                    || phaseOrder[0];
-            })();
+    React.useEffect(() => {
+        if (externalPhases) {
+            setPhasesState(externalPhases);
+        }
+    }, [externalPhases]);
 
-            // Эффект для синхронизации с внешним состоянием
-            useEffect(() => {
-                if (externalPhases) {
-                    setPhasesState(externalPhases);
-                }
-            }, [externalPhases]);
+    const breakProcess = () => {
+        if (isProcessing) return;
 
-            // Обработчик успешного завершения фазы
-            const goOn = () => {
-                if (isProcessing) return;
+        log.debug(`${componentName}: прерывание на фазе "${currentPhase}".`);
+        setIsProcessing(true);
 
-                // Определение индекса текущей фазы
-                const currentIndex = phaseOrder.indexOf(currentPhase);
-
-                // Определение следующей фазы
-                const nextPhase = currentIndex < phaseOrder.length - 1
-                    ? phaseOrder[currentIndex + 1]
-                    : null;
-
-                // Логирование события
-                log.debug(`${componentName}: выполнено успешное завершение фазы "${currentPhase}".`);
-
-                // Установка состояния обработки
-                setIsProcessing(true);
-
-                // Имитация задержки выполнения
-                setTimeout(() => {
-                    // Обновление состояния фаз
-                    setPhasesState(prev => ({
-                        ...prev,
-                        [currentPhase]: MMConnectionStates.SUCCESS,
-                        ...(nextPhase ? { [nextPhase]: MMConnectionStates.IN_PROGRESS } : {}),
-                    }));
-
-                    // Обновление временных меток
-                    setPhaseTimestamps(prev => ({
-                        ...prev,
-                        [currentPhase]: prev[currentPhase] || formatDateTime(),
-                    }));
-
-                    // Сброс состояния обработки
-                    setIsProcessing(false);
-
-                    // Вызов внешнего обработчика
-                    onGoOn?.();
-                }, minStageTime);
-            };
-
-            // Обработчик прерывания фазы
-            const breakProcess = () => {
-                if (isProcessing) return;
-
-                // Логирование события
-                log.debug(`${componentName}: выполнено прерывание процесса на фазе "${currentPhase}".`);
-
-                // Установка состояния обработки
-                setIsProcessing(true);
-
-                // Имитация задержки выполнения
-                setTimeout(() => {
-                    // Обновление состояния фаз
-                    setPhasesState(prev => ({
-                        ...prev,
-                        [currentPhase]: MMConnectionStates.FAIL,
-                    }));
-
-                    // Обновление временных меток
-                    setPhaseTimestamps(prev => ({
-                        ...prev,
-                        [currentPhase]: prev[currentPhase] || formatDateTime(),
-                    }));
-
-                    // Сброс состояния обработки
-                    setIsProcessing(false);
-
-                    // Вызов внешнего обработчика
-                    onBreak?.();
-                }, minStageTime);
-            };
-
-            // Обработчик сброса состояния
-            const reset = () => {
-                // Логирование события
-                log.debug(`${componentName}: выполнен сброс состояния.`);
-
-                // Сброс состояний к начальным значениям
-                setPhasesState(initialPhases);
-                setPhaseTimestamps({
-                    [MMConnectionPhases.CHECK_IF_INSTALLED]: null,
-                    [MMConnectionPhases.CHECK_IF_UNLOCKED]: null,
-                    [MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC]: null,
-                    [MMConnectionPhases.CHECK_OUT_ACCOUNT]: null,
-                });
-
-                // Вызов внешнего обработчика
-                onReset?.();
-            };
-
-            // Проверка состояния ожидания
-            const isWaiting = (): boolean => {
-                return phaseOrder.some(
-                    phase => phasesState[phase] === MMConnectionStates.IN_PROGRESS
-                );
-            };
-
-            // Экспорт методов через ref
-            useImperativeHandle(ref, () => ({
-                goOn,
-                break: breakProcess,
-                reset,
-                getCurrentPhase: () => currentPhase,
-                isWaiting,
+        setTimeout(() => {
+            setPhasesState((prev) => ({
+                ...prev,
+                [currentPhase]: MMConnectionStates.FAIL,
             }));
 
-            // Создание элементов для Timeline
-            const timelineItems = phaseOrder.map(phase => {
-                const state = phasesState[phase];
+            setPhaseTimestamps((prev) => ({
+                ...prev,
+                [currentPhase]: prev[currentPhase] || formatDateTime(),
+            }));
 
-                // Получение локализованных текстов
-                const { header, comment } = mmConnectionComments(
-                    phase,
-                    state,
-                    phaseTimestamps[phase]
-                );
+            setIsProcessing(false);
+            onBreak?.();
+        }, minStageTime);
+    };
 
-                // Настройка внешнего вида точки
-                let color;
-                let dot;
+    const goOn = () => {
+        if (isProcessing) return;
 
-                switch (state) {
-                    case MMConnectionStates.SUCCESS:
-                        color = 'green'; // Зеленая точка
-                        break;
-                    case MMConnectionStates.FAIL:
-                        color = 'red'; // Красная точка
-                        break;
-                    case MMConnectionStates.WAITING:
-                        color = 'blue';
-                        // Иконка часов с прозрачным фоном
-                        dot = (
-                            <span className={classes.transparentDot}>
-                                <ClockCircleOutlined style={{ fontSize: '16px' }} />
-                            </span>
-                        );
-                        break;
-                    case MMConnectionStates.IN_PROGRESS:
-                        // Анимированная иконка загрузки
-                        dot = (
-                            <span className={classes.transparentDot}>
-                                <LoadingOutlined style={{ fontSize: '16px' }} spin />
-                            </span>
-                        );
-                        break;
+        const currentIndex = phaseOrder.indexOf(currentPhase);
+        const isLastPhase = currentIndex === phaseOrder.length - 1;
+        const nextPhase = isLastPhase ? null : phaseOrder[currentIndex + 1];
+
+        log.debug(`${componentName}: успешное завершение фазы "${currentPhase}".`);
+        setIsProcessing(true);
+
+        setTimeout(() => {
+            setPhasesState((prev) => {
+                const updated: Record<MMConnectionPhase, MMConnectionState> = {
+                    ...prev,
+                    [currentPhase]: MMConnectionStates.SUCCESS,
+                };
+
+                if (nextPhase) {
+                    updated[nextPhase] = MMConnectionStates.IN_PROGRESS;
                 }
 
-                // Формирование элемента Timeline
-                return {
-                    color,
-                    dot,
-                    children: (
-                        <div className={classes.timelineItem}>
-                            <Typography.Text strong>{header}</Typography.Text>
-                            <br />
-                            <Typography.Text type="secondary">{comment}</Typography.Text>
-                        </div>
-                    ),
-                };
+                return updated;
             });
 
-            // Рендер компонента
-            return (
-                <div className={classes.container}>
-                    <Timeline items={timelineItems} />
-                </div>
-            );
-        });
+            setPhaseTimestamps((prev) => ({
+                ...prev,
+                [currentPhase]: prev[currentPhase] || formatDateTime(),
+            }));
 
-// Установка имени для DevTools
-MetaMaskConnectionTimeline.displayName = 'MetaMaskConnectionTimeline';
+            setIsProcessing(false);
+            onGoOn?.();
+
+            if (isLastPhase) {
+                log.debug(`${componentName}: достигнута последняя фаза. Завершаем таймлайн.`);
+                setIsFinished(true);
+            }
+        }, minStageTime);
+    };
+
+// Проверка завершения всех фаз
+    React.useEffect(() => {
+        const allCompleted = phaseOrder.every(
+            (phase) =>
+                phasesState[phase] === MMConnectionStates.SUCCESS ||
+                phasesState[phase] === MMConnectionStates.FAIL,
+        );
+
+        if (allCompleted && !isFinished) {
+            log.debug(`${componentName}: все фазы завершены. Останавливаем таймлайн.`);
+            setIsFinished(true);
+        }
+    }, [phasesState, isFinished]);
+
+// Автоматическая проверка фаз
+    const runPhaseCheck = (
+        phase: MMConnectionPhase,
+        checker?: () => Promise<boolean>,
+    ) => {
+        if (isFinished || currentPhase !== phase || !checker) return;
+
+        const run = async () => {
+            log.debug(`${componentName}: начало проверки фазы "${phase}".`);
+            setIsProcessing(true);
+
+            const start = performance.now();
+            const result = await checker();
+            const elapsed = performance.now() - start;
+            const waitTime = Math.max(minStageTime - elapsed, 0);
+
+            setTimeout(() => {
+                result ? goOn() : breakProcess();
+            }, waitTime);
+        };
+
+        run().catch((err) => {
+            log.error(`${componentName}: ошибка при проверке фазы "${phase}":`, err);
+            breakProcess();
+        });
+    };
+
+    React.useEffect(() => {
+        runPhaseCheck(MMConnectionPhases.CHECK_IF_INSTALLED, onCheckMetaMaskInstalled);
+    }, [currentPhase, onCheckMetaMaskInstalled, isFinished]);
+
+    React.useEffect(() => {
+        runPhaseCheck(MMConnectionPhases.CHECK_IF_UNLOCKED, onCheckMetaMaskUnlocked);
+    }, [currentPhase, onCheckMetaMaskUnlocked, isFinished]);
+
+    React.useEffect(() => {
+        runPhaseCheck(MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC, onCheckMetaMaskNetwork);
+    }, [currentPhase, onCheckMetaMaskNetwork, isFinished]);
+
+    React.useEffect(() => {
+        runPhaseCheck(MMConnectionPhases.CHECK_OUT_ACCOUNT, onCheckMetaMaskAccount);
+    }, [currentPhase, onCheckMetaMaskAccount, isFinished]);
+
+    const reset = () => {
+        log.debug(`${componentName}: сброс состояния.`);
+        setPhasesState(initialPhases);
+        setPhaseTimestamps({
+            [MMConnectionPhases.CHECK_IF_INSTALLED]: null,
+            [MMConnectionPhases.CHECK_IF_UNLOCKED]: null,
+            [MMConnectionPhases.CHECK_IF_CONNECTED_TO_BSC]: null,
+            [MMConnectionPhases.CHECK_OUT_ACCOUNT]: null,
+        });
+        setIsFinished(false);
+        onReset?.();
+    };
+
+    const isWaiting = (): boolean => {
+        return phaseOrder.some((phase) => phasesState[phase] === MMConnectionStates.IN_PROGRESS);
+    };
+
+    React.useImperativeHandle(ref, () => ({
+        goOn,
+        break: breakProcess,
+        reset,
+        getCurrentPhase: () => currentPhase,
+        isWaiting,
+    }));
+
+    const timelineItems = phaseOrder.map((phase) => {
+        const state = phasesState[phase];
+        const { header, comment } = mmConnectionComments(phase, state, phaseTimestamps[phase]);
+
+        let color: string | undefined;
+        let dot: React.ReactNode;
+
+        switch (state) {
+            case MMConnectionStates.SUCCESS:
+                color = 'green';
+                break;
+            case MMConnectionStates.FAIL:
+                color = 'red';
+                break;
+            case MMConnectionStates.WAITING:
+                color = 'blue';
+                dot = (
+                    <span className={classes.transparentDot}>
+                    <ClockCircleOutlined style={{ fontSize: '16px' }} />
+                </span>
+                );
+                break;
+            case MMConnectionStates.IN_PROGRESS:
+                dot = (
+                    <span className={classes.transparentDot}>
+                    <LoadingOutlined style={{ fontSize: '16px' }} spin />
+                </span>
+                );
+                break;
+        }
+
+        return {
+            color,
+            dot,
+            children: (
+                <div className={classes.timelineItem}>
+                    <Typography.Text strong>{header}</Typography.Text>
+                    <br />
+                    <Typography.Text type="secondary">{comment}</Typography.Text>
+                </div>
+            ),
+        };
+    });
+
+    return (
+        <div className={classes.container}>
+            <Timeline items={timelineItems} />
+        </div>
+    );
+});

@@ -1,10 +1,12 @@
 // Начальная точка сборки (главная точка входа в приложение)
 
+import './index.css';
+import './i18n';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
+
 import App from './App.tsx';
-import './i18n';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
