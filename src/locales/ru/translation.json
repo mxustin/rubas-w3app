@@ -47,6 +47,7 @@
   },
   "metaMaskDrawer": {
     "title": "Подключение к MetaMask",
-    "footer": "Прогресс процесса подключения к MetaMask"
+    "footer": "Прогресс подключения к MetaMask",
+    "connected": "Подключен адрес:"
   }
 }
