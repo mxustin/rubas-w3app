@@ -1,7 +1,8 @@
 {
   "file-description": "Англоязычная локализация",
   "connectWalletButton": {
-    "label": "Connect wallet"
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect Wallet"
   },
   "cancelButton": {
     "label": "Cancel"
