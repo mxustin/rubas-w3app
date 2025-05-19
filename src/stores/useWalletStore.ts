@@ -1,28 +1,41 @@
-// Хранилище состояний MetaMask (zustand)
+// Хранилище состояния MetaMask (zustand)
 
 import { create } from 'zustand';
 
-interface WalletState {
+export interface WalletState {
     isMetaMaskAvailable: boolean;
     isMetaMaskUnlocked: boolean;
     isConnected: boolean;
     isCorrectNetwork: boolean;
     account: string | null;
     chainId: number | null;
-    setState: (partial: Partial<WalletState>) => void;
-    reset: () => void;
 }
 
-export const useWalletStore = create<WalletState>((set) => ({
+interface WalletStore extends WalletState {
+    /**
+     * Обновляет частичное состояние кошелька
+     */
+    setState: (partial: Partial<WalletState>) => void;
+
+    /**
+     * Сброс состояния кошелька к начальному (отключение)
+     */
+    resetState: () => void;
+}
+
+export const useWalletStore = create<WalletStore>((set) => ({
     isMetaMaskAvailable: typeof window !== 'undefined' && !!window.ethereum?.isMetaMask,
     isMetaMaskUnlocked: false,
     isConnected: false,
     isCorrectNetwork: false,
     account: null,
     chainId: null,
+
     setState: (partial) => set(partial),
-    reset: () =>
+
+    resetState: () =>
         set({
+            isMetaMaskAvailable: typeof window !== 'undefined' && !!window.ethereum?.isMetaMask,
             isMetaMaskUnlocked: false,
             isConnected: false,
             isCorrectNetwork: false,
