@@ -22,14 +22,13 @@ import classes from './ConnectWalletButton.module.scss';
  * @category Atoms
  * @example
  *   <ConnectWalletButton>Подключить кошелёк</ConnectWalletButton>
- *
  */
 
 export const ConnectWalletButton: React.FC<ButtonProps> = (props) => {
     const { t } = useTranslation();
     const componentName = 'ConnectWalletButton';
-    const { connect, disconnect, loading } = useConnectWallet();         // хук для подключения/отключения кошелька
-    const { state, setConnected, setDisconnected } = useWalletButtonState();   // хук для управления состоянием кнопки
+    const { connect, disconnect, loading } = useConnectWallet();              // хук для подключения/отключения кошелька
+    const { state, setConnected, setDisconnected } = useWalletButtonState();  // хук для управления состоянием кнопки
 
     // Логируем текущее состояние и статус загрузки при изменении
     React.useEffect(() => {
