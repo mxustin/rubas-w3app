@@ -1,21 +1,18 @@
 // Молекула: боковая панель подключения к MetaMask [★★★☆☆]
 
 import { Drawer, Typography } from 'antd';
-import React, { useRef, useState, useEffect } from 'react';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { type MetaMaskConnectionTimelineRef } from '@/components/molecules/MetaMaskConnectionTimeline/MetaMaskConnectionTimeline';
-
 import { CancelButton } from '@/components/atoms/Buttons/CancelButton/CancelButton';
+import { type MetaMaskConnectionTimelineRef } from '@/components/molecules/MetaMaskConnectionTimeline/MetaMaskConnectionTimeline';
 import { MetaMaskConnectionTimeline } from '@/components/molecules/MetaMaskConnectionTimeline/MetaMaskConnectionTimeline';
-import { useCheckMetaMaskInstalled } from '@/hooks/useCheckMetaMaskInstalled';
-import { useCheckMetaMaskUnlocked } from '@/hooks/useCheckMetaMaskUnlocked';
-import { useCheckMetaMaskNetwork } from '@/hooks/useCheckMetaMaskNetwork';
 import { useCheckMetaMaskAccount } from '@/hooks/useCheckMetaMaskAccount';
-
-import { useWalletStore } from '@/stores/useWalletStore';
-
+import { useCheckMetaMaskInstalled } from '@/hooks/useCheckMetaMaskInstalled';
+import { useCheckMetaMaskNetwork } from '@/hooks/useCheckMetaMaskNetwork';
+import { useCheckMetaMaskUnlocked } from '@/hooks/useCheckMetaMaskUnlocked';
 import log from '@/log';
+import { useWalletStore } from '@/stores/useWalletStore';
 
 import classes from './MetaMaskConnectionDrawer.module.scss';
 
@@ -23,12 +20,16 @@ export interface MetaMaskConnectionDrawerProps {
     open: boolean;
     onClose: () => void;
     onCancel: () => void;
+    getContainer?: () => HTMLElement;
+    rootStyle?: React.CSSProperties;
 }
 
 export const MetaMaskConnectionDrawer: React.FC<MetaMaskConnectionDrawerProps> = ({
                                                                                       open,
                                                                                       onClose,
                                                                                       onCancel,
+                                                                                      getContainer,
+                                                                                      rootStyle,
                                                                                   }) => {
     const { t } = useTranslation();
     const componentName = 'MetaMaskConnectionDrawer';
@@ -40,10 +41,10 @@ export const MetaMaskConnectionDrawer: React.FC<MetaMaskConnectionDrawerProps> =
 
     const account = useWalletStore((state) => state.account);
 
-    const timelineRef = useRef<MetaMaskConnectionTimelineRef>(null);
-    const [isFinished, setIsFinished] = useState(false);
+    const timelineRef = React.useRef<MetaMaskConnectionTimelineRef>(null);
+    const [isFinished, setIsFinished] = React.useState(false);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (open) {
             log.debug(`${componentName}: панель открыта.`);
 
@@ -69,7 +70,8 @@ export const MetaMaskConnectionDrawer: React.FC<MetaMaskConnectionDrawerProps> =
             placement="right"
             onClose={onClose}
             open={open}
-            width={400}
+            getContainer={getContainer}
+            rootStyle={rootStyle}
             className={classes.drawer}
             extra={
                 <CancelButton onCancel={onCancel}>
@@ -84,7 +86,7 @@ export const MetaMaskConnectionDrawer: React.FC<MetaMaskConnectionDrawerProps> =
                     onCheckMetaMaskUnlocked={checkMetaMaskUnlocked}
                     onCheckMetaMaskNetwork={checkMetaMaskNetwork}
                     onCheckMetaMaskAccount={checkMetaMaskAccount}
-                    minStageTime={300}
+                    minStageTime={250}
                 />
             </div>
 
