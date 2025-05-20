@@ -8,16 +8,20 @@
  @module AppShell */
 
 import { Layout } from 'antd';
-import React from 'react';
+import * as React from 'react';
 
 import { ConnectWalletButton } from '@/components/atoms/Buttons/ConnectWalletButton/ConnectWalletButton';
 import { MetaMaskConnectionDrawer } from '@/components/molecules/MetaMaskConnectionDrawer/MetaMaskConnectionDrawer';
 import log from '@/log';
 
-const { Header, Sider, Content } = Layout;
+import styles from './AppShell.module.scss';
+
+const { Header, Sider, Content, Footer } = Layout;
 
 export const AppShell: React.FC = () => {
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
+
+    const contentRef = React.useRef<HTMLDivElement>(null);
 
     const handleOpenDrawer = () => {
         log.debug('AppShell: пользователь нажал кнопку подключения кошелька. Открываем боковую панель.');
@@ -32,42 +36,37 @@ export const AppShell: React.FC = () => {
     const handleCancelConnection = () => {
         log.debug('AppShell: пользователь отменил подключение к MetaMask. Закрываем боковую панель и сбрасываем процесс.');
         setDrawerOpen(false);
-// TODO: добавить логику отмены подключения (например, через ref)
+        // TODO: добавить логику отмены подключения (например, через ref)
     };
 
     return (
         <>
-            <Layout style={{ minHeight: '100vh' }}>
-                <Sider width={200} style={{ background: '#fff' }}>
+            <Layout className={styles.rootLayout}>
+                <Sider width={200} className={styles.sider}>
                     {/* Навигация */}
                 </Sider>
 
-                <Layout>
-                    <Header
-                        style={{
-                            background: '#fff',
-                            padding: '0 24px',
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                            height: 64,
-                            borderBottom: '1px solid #f0f0f0',
-                        }}
-                    >
+                <Layout className={styles.innerLayout}>
+                    <Header className={styles.header}>
                         <ConnectWalletButton onClick={handleOpenDrawer} />
                     </Header>
 
-                    <Content style={{ margin: '24px', background: '#fff', padding: 24 }}>
+                    <Content className={styles.content} ref={contentRef}>
                         Main Content
+                        <MetaMaskConnectionDrawer
+                            open={isDrawerOpen}
+                            onClose={handleCloseDrawer}
+                            onCancel={handleCancelConnection}
+                            getContainer={() => contentRef.current!}
+                            rootStyle={{ position: 'absolute' }}
+                        />
                     </Content>
+
+                    <Footer className={styles.footer}>
+                        © 2024 My DApp
+                    </Footer>
                 </Layout>
             </Layout>
-
-            <MetaMaskConnectionDrawer
-                open={isDrawerOpen}
-                onClose={handleCloseDrawer}
-                onCancel={handleCancelConnection}
-            />
         </>
     );
 };

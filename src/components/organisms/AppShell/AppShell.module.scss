@@ -1,1 +1,44 @@
 /* Стили, связанные с компонентом AppShell */
+
+.rootLayout {
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.sider {
+  background: #fff;
+}
+
+.innerLayout {
+  display: flex;
+  flex-direction: column;
+  background: #f0f2f5;
+}
+
+.header {
+  background: #fff;
+  padding: 0 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 64px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1 1 auto;
+  margin: 24px;
+  background: #fff;
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.footer {
+  background: #fff;
+  text-align: center;
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
