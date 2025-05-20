@@ -7,9 +7,10 @@
 }
 
 .content {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
   padding-bottom: 16px;
+  padding-right: 4px; /* для компенсации возможной полосы прокрутки */
 }
 
 .footer {
@@ -17,4 +18,6 @@
   padding-top: 12px;
   margin-top: 16px;
   text-align: center;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.45);
 }
